@@ -1,5 +1,8 @@
+import datetime
+
+
 def year(request):
-    """Добавляет в контекст переменную greeting с приветствием."""
-    return {
-        'greeting': 'HELLO!',
-        } 
+    """Добавляет переменную с текущим годом."""
+
+    now = datetime.datetime.now()
+    return {"year": now.year}

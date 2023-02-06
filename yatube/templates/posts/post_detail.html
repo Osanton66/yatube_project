@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-{% block title %}Пост {{ post_det.text }}{% endblock %}
+{% block title %}Пост {{ post_det.text|truncatechars:30 }}{% endblock %}
 {% block header %}{% endblock %}
 {% block content %}
       <div class="row">
@@ -8,19 +8,20 @@
             <li class="list-group-item">
               Дата публикации: {{ post_det.pub_date|date:"d M Y" }}
             </li>
-            <!-- если у поста есть группа -->   
+            {% if post_det.group %}
               <li class="list-group-item">
-                Группа: {{ group_post }}
+                Группа: {{ post_det.group }}
                 <br>
-                <a href="../../group/{{ group_post }}">
-                  все записи группы {{ group_post }}
+                <a href="{% url 'posts:group-posts' post_det.group.slug %}">
+                  все записи группы {{ post_det.group }}
                 </a>
               </li>
+              {%endif%}
               <li class="list-group-item">
                 Автор: {{ post_det.author.get_full_name }}
               </li>
               <li class="list-group-item d-flex justify-content-between align-items-center">
-              Всего постов автора:  <span >{{ post_counter }}</span>
+              Всего постов автора:  <span >{{ post_det.author.posts.count }}</span>
             </li>
             <li class="list-group-item">
               <a href="../../profile/{{ post_det.author }}/">
@@ -33,6 +34,11 @@
           <p>
            {{ post_det.text }}
           </p>
+          {% if user.id ==  post_det.author.id %}
+          <a class="btn btn-primary" href="{% url 'posts:post_edit' post_det.id %}">
+            редактировать запись
+          </a>
+        {% endif %}
         </article>
       </div> 
 {% endblock %}
