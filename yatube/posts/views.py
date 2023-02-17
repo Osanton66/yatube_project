@@ -124,7 +124,7 @@ def add_comment(request, post_id):
     return redirect('posts:post_detail', post_id=post_id)
 
 
-'''def get_post(request, id):
+def get_post(request, id):
     if request.method == 'GET':
         post = get_object_or_404(Post, pk=id)
         serializer = PostSerializer(post)
@@ -133,44 +133,32 @@ def add_comment(request, post_id):
 
 @api_view(['GET', 'POST'])
 def api_posts(request):
-    if request.method == 'GET':
+    '''if request.method == 'GET':
         posts = Post.objects.all()
         serializer = PostSerializer(posts, many=True)
-        return Response(serializer.data)
-    elif request.method == 'POST':
+        return Response(serializer.data)'''
+    if request.method == 'POST':
         serializer = PostSerializer(data=request.data)
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    posts = Post.objects.all()
+    serializer = PostSerializer(posts, many=True)
+    return Response(serializer.data)
 
 
-#@api_view(['GET', 'PUT', 'PATCH', 'DELETE'])
+@api_view(['GET', 'PUT', 'PATCH', 'DELETE'])
 def api_posts_detail(request, id):
-
-    post = get_object_or_404(Post, pk=id)
-
-    if request.method == 'GET':
-
-        serializer = PostSerializer(post)
-
-        return JsonResponse(serializer.data)
-
-    elif request.method == 'PUT' or request.method == 'PATCH':
-
-        serializer = ...
-
+    post = Post.objects.get(id=id)
+    if request.method == 'PUT' or request.method == 'PATCH':
+        serializer = PostSerializer(post, data=request.data, partial=True)
         if serializer.is_valid():
-
             serializer.save()
-
-            return ...
-
-        return ...
-
+            return Response(serializer.data, status=status.HTTP_200_OK)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
     elif request.method == 'DELETE':
-
         post.delete()
-
-        return ...
-'''
+        return Response(status=status.HTTP_204_NO_CONTENT)
+    serializer = PostSerializer(post)
+    return Response(serializer.data)

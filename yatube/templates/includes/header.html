@@ -22,6 +22,12 @@
           {% if user.is_authenticated %}
           {% with request.resolver_match.view_name as view_name %} 
           <li class="nav-item"> 
+            <a class="nav-link {% if view_name  == 'posts:profile' %}active{% endif %}" 
+            href="{% url 'posts:profile' username=user %}">Мои посты</a>
+          </li>
+          {% endwith %}
+          {% with request.resolver_match.view_name as view_name %} 
+          <li class="nav-item"> 
             <a class="nav-link {% if view_name  == 'posts:post_create' %}active{% endif %}" 
             href="{% url 'posts:post_create' %}">Новая запись</a>
           </li>
