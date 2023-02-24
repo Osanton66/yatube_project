@@ -133,10 +133,6 @@ def get_post(request, id):
 
 @api_view(['GET', 'POST'])
 def api_posts(request):
-    '''if request.method == 'GET':
-        posts = Post.objects.all()
-        serializer = PostSerializer(posts, many=True)
-        return Response(serializer.data)'''
     if request.method == 'POST':
         serializer = PostSerializer(data=request.data)
         if serializer.is_valid():
